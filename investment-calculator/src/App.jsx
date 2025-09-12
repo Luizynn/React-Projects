@@ -1,8 +1,13 @@
-import InputArea from "./components/inputArea"
+import Header from "./components/Header"
+import ResultArea from "./components/ResultArea"
 
 function App() {
   return (
-    <InputArea />
+      <>
+        <Header />
+        <ResultArea />
+      </>
+    
   )
 }
 
