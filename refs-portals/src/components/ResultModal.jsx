@@ -1,4 +1,4 @@
-import { useImperativeHandle } from "react"
+import { useImperativeHandle, useRef } from "react"
 
 export default function ResultModal({result, targetTime, ref}){
     const dialog = useRef();

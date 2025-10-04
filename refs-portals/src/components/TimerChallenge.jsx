@@ -5,21 +5,25 @@ export default function TimerChallenge ({title, targetTime}){
     const timer = useRef();
     const dialog = useRef();
 
-    const [timerRunning, setTimerRunning] = useState(false);
-    const [timerExpired, setTimerExpired] = useState(false);
+    const [timerRunning, setTimerRunning] = useState(targetTime * 1000)
+    const timerActive = timerRunning > 0 && timerRunning < targetTime * 1000
+
+    if(timerRunning <= 0){
+        clearInterval(timer.current)
+        setTimerRunning(targetTime * 1000)
+        dialog.current.open()
+    }
 
     function handleClick(){
-        timer.current = setTimeout(() => {
-            setTimerExpired(() => true)
-            dialog.current.open();
-        }, targetTime * 1000)
-        setTimerRunning(() => true)
+        timer.current = setInterval(() => {
+            setTimerRunning(prevTime => prevTime - 10)
+        }, 10)
     }
     
 
     function handleStop(){
-        clearTimeout(timer.current)
-        setTimerRunning(() => false)
+        dialog.current.open()
+        clearInterval(timer.current)
     }
 
     return(
@@ -34,12 +38,12 @@ export default function TimerChallenge ({title, targetTime}){
                     {targetTime} second{targetTime > 1 ? 's' : ''}
                 </p>
                 <p>
-                    <button onClick={timerRunning ?  handleStop : handleClick}>
-                        {timerRunning ? 'Stop' : 'Start'} Challenge
+                    <button onClick={timerActive ?  handleStop : handleClick}>
+                        {timerActive ? 'Stop' : 'Start'} Challenge
                     </button>
                 </p>
-                <p className={timerRunning ? 'active' : undefined}>
-                    {timerRunning ? 'Time is running...' : 'Timer inactive'}
+                <p className={timerActive ? 'active' : undefined}>
+                    {timerActive ? 'Time is running...' : 'Timer inactive'}
                 </p>
             </section>
         </>
