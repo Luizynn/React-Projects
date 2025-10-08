@@ -15,6 +15,13 @@ export default function ProjectsSidebar(){
         projects: [],
     })
 
+    function changePages(page){
+        setProjectState((prevState) => ({
+            ...prevState,
+            selectedScreen: page
+        }))
+    }
+
     function handleChange(identifier, value){
         setComputedValues((prevValues) => ({
             ...prevValues,
@@ -24,9 +31,18 @@ export default function ProjectsSidebar(){
     }
 
     function handleSave(){
-        projectState.projects.push(computedValues)
-        console.log("funciona", computedValues)
-        console.log(projectState.projects)
+        if(computedValues.title !== undefined){
+            projectState.projects.push(computedValues)
+            changePages('default')
+            console.log(projectState.projects)}
+    }
+
+    function handleCancel(){
+        changePages('default')
+        setComputedValues((prevValues) => ({
+            ...prevValues,
+            title: undefined
+        }))
     }
 
     
@@ -48,10 +64,11 @@ export default function ProjectsSidebar(){
                     <button className="px-4 py-2 text-xs md:text-base rounded-md bg-stone-700 text-stone-400 hover:bg-stone-600 hover:text-stone-100" onClick={handleAddProject}> + Add project</button>
                 </div>
                 <ul className="mt-8">
+
                 </ul>
             </aside>
             {projectState.selectedScreen == 'default' && <DefaultScreen handleClick={handleAddProject}/>}
-            {projectState.selectedScreen == 'adding' && <NewProject onHandleChange={handleChange} onHandleSave={handleSave}/>}
+            {projectState.selectedScreen == 'adding' && <NewProject onHandleChange={handleChange} onHandleCancel={handleCancel} onHandleSave={handleSave}/>}
         </>
     )
 }
