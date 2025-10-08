@@ -5,9 +5,9 @@ import { useState } from "react";
 export default function ProjectsSidebar(){
 
     const [computedValues, setComputedValues] = useState({
-        title: undefined,
-        description: undefined,
-        date: undefined,
+        title: '',
+        description: '',
+        date: '',
     })
 
     const [projectState, setProjectState] = useState({
@@ -31,21 +31,30 @@ export default function ProjectsSidebar(){
     }
 
     function handleSave(){
-        if(computedValues.title !== undefined){
-            projectState.projects.push(computedValues)
+        if(!computedValues.title || computedValues.title.trim() === ''){
+
+
+            setProjectState(prevState => ({
+                ...prevState,
+                projects: [...prevState.projects, ...computedValues]
+            }))
             changePages('default')
+            setComputedValues({
+                title: '',
+                description: '',
+                date: ''
+            })
             console.log(projectState.projects)}
     }
 
     function handleCancel(){
         changePages('default')
-        setComputedValues((prevValues) => ({
-            ...prevValues,
-            title: undefined
-        }))
+        setComputedValues({
+            title: '',
+            description: '',
+            date: '',
+        })
     }
-
-    
 
     function handleAddProject(){
         setProjectState((prevState) => ({
@@ -64,7 +73,6 @@ export default function ProjectsSidebar(){
                     <button className="px-4 py-2 text-xs md:text-base rounded-md bg-stone-700 text-stone-400 hover:bg-stone-600 hover:text-stone-100" onClick={handleAddProject}> + Add project</button>
                 </div>
                 <ul className="mt-8">
-
                 </ul>
             </aside>
             {projectState.selectedScreen == 'default' && <DefaultScreen handleClick={handleAddProject}/>}
