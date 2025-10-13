@@ -1,3 +1,4 @@
+import CreatedProjects from "./CreatedProjects";
 import DefaultScreen from "./DefaultScreen";
 import NewProject from "./NewProject";
 import { useState } from "react";
@@ -31,12 +32,12 @@ export default function ProjectsSidebar(){
     }
 
     function handleSave(){
-        if(!computedValues.title || computedValues.title.trim() === ''){
+        if(computedValues.title || computedValues.title.trim() !== ''){
 
 
             setProjectState(prevState => ({
                 ...prevState,
-                projects: [...prevState.projects, ...computedValues]
+                projects: [...prevState.projects, computedValues]
             }))
             changePages('default')
             setComputedValues({
@@ -72,8 +73,12 @@ export default function ProjectsSidebar(){
                 <div className="w-[35rem] mt-16">
                     <button className="px-4 py-2 text-xs md:text-base rounded-md bg-stone-700 text-stone-400 hover:bg-stone-600 hover:text-stone-100" onClick={handleAddProject}> + Add project</button>
                 </div>
-                <ul className="mt-8">
-                </ul>
+                {projectState.projects && projectState.projects.map((project) => {
+                    return(
+                    <ul className="mt-8">
+                        <CreatedProjects title={project.title}/>
+                    </ul>
+            )})} 
             </aside>
             {projectState.selectedScreen == 'default' && <DefaultScreen handleClick={handleAddProject}/>}
             {projectState.selectedScreen == 'adding' && <NewProject onHandleChange={handleChange} onHandleCancel={handleCancel} onHandleSave={handleSave}/>}
