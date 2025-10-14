@@ -1,10 +1,20 @@
 import CreatedProjects from "./CreatedProjects";
 import DefaultScreen from "./DefaultScreen";
+import Modal from "./Modal";
 import NewProject from "./NewProject";
-import { useState } from "react";
+import ProjectScreen from "./ProjectScreen"
+import { useState, useRef } from "react";
 
 export default function ProjectsSidebar(){
 
+    const modal = useRef();
+
+    const [currentScreenData, setCurrentScreenData] = useState({
+        title: '',
+        description: '',
+        date: '',
+    })
+    
     const [computedValues, setComputedValues] = useState({
         title: '',
         description: '',
@@ -32,7 +42,7 @@ export default function ProjectsSidebar(){
     }
 
     function handleSave(){
-        if(computedValues.title || computedValues.title.trim() !== ''){
+        if(computedValues.title && computedValues.title.trim() !== '' && computedValues.description.trim() !== '' && computedValues.date.trim() !== ''){
 
 
             setProjectState(prevState => ({
@@ -46,6 +56,9 @@ export default function ProjectsSidebar(){
                 date: ''
             })
             console.log(projectState.projects)}
+        else{
+            modal.current.open();
+        }
     }
 
     function handleCancel(){
@@ -73,15 +86,29 @@ export default function ProjectsSidebar(){
                 <div className="w-[35rem] mt-16">
                     <button className="px-4 py-2 text-xs md:text-base rounded-md bg-stone-700 text-stone-400 hover:bg-stone-600 hover:text-stone-100" onClick={handleAddProject}> + Add project</button>
                 </div>
-                {projectState.projects && projectState.projects.map((project) => {
-                    return(
-                    <ul className="mt-8">
-                        <CreatedProjects title={project.title}/>
-                    </ul>
-            )})} 
+                <ul className="mt-8">
+                    {projectState.projects && projectState.projects.map((project) => {
+                        return(
+                        
+                            <CreatedProjects title={project.title} handleClick={() => {
+                                changePages('screen')
+                                setCurrentScreenData(() => ({
+                                    title: project.title,
+                                    description: project.description,
+                                    date: project.date,
+                                }))
+                              }}/>
+                        
+                )})}
+                </ul> 
             </aside>
+            <Modal ref={modal} buttonCaption="Close"> 
+                <h2 className="text-xl font-bold text-stone-700 my-4">Invalid Input</h2>
+                <p className="text-stone-600 mb-4" >Oops... looks like you forgot to enter a value </p>
+            </Modal>
             {projectState.selectedScreen == 'default' && <DefaultScreen handleClick={handleAddProject}/>}
             {projectState.selectedScreen == 'adding' && <NewProject onHandleChange={handleChange} onHandleCancel={handleCancel} onHandleSave={handleSave}/>}
+            {projectState.selectedScreen == 'screen' && <ProjectScreen title={currentScreenData.title} formattedDate={currentScreenData.date} description={currentScreenData.description}/>}
         </>
     )
 }

@@ -1,3 +1,5 @@
+import Tasks from "./Tasks"
+
 export default function ProjectScreen({title, formattedDate, description}){
     return(
         <div className="w-[35rem] mt-16">
@@ -17,6 +19,8 @@ export default function ProjectScreen({title, formattedDate, description}){
                     {description}
                 </p>
             </header>
+            <Tasks />
+                
         </div>
 
     )
