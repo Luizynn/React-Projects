@@ -33,6 +33,10 @@ export default function ProjectsSidebar(){
         }))
     }
 
+    function handleDelete(){
+        setProjectState()
+    }
+
     function handleChange(identifier, value){
         setComputedValues((prevValues) => ({
             ...prevValues,
