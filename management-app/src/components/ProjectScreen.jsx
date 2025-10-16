@@ -9,8 +9,7 @@ export default function ProjectScreen({title, formattedDate, description, onDele
     function handleChange(value){
         setTask(value)
     }
-    function handleAddTask(e){
-        e.preventDefault()
+    function handleAddTask(){
         if(task.trim() !== ''){
             
             setTasksArr((prevTask) => [...prevTask, {project: title, task: task}])

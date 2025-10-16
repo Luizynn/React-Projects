@@ -14,6 +14,18 @@ export default function ProjectsSidebar(){
         description: '',
         date: '',
     })
+
+
+    function formattedDate(date){
+        const mounths = ['-', 'Jan', 'Fev', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Out', 'Nov', 'Dec']
+        const separeted = date.split('-')
+        const year = separeted[0]
+        const mounth = +separeted[1]
+        const day = separeted[2]
+
+        return(`${year}, ${mounths[mounth]} ${day} `)
+
+    }
     
     const [computedValues, setComputedValues] = useState({
         title: '',
@@ -33,8 +45,13 @@ export default function ProjectsSidebar(){
         }))
     }
 
-    function handleDelete(){
-        setProjectState()
+    function handleDelete(actual){
+        setProjectState((prev) => ({
+            ...prev,
+            projects : projectState.projects.filter(project => !(project.title === actual))
+            
+        }))
+        changePages('default')
     }
 
     function handleChange(identifier, value){
@@ -59,7 +76,7 @@ export default function ProjectsSidebar(){
                 description: '',
                 date: ''
             })
-            console.log(projectState.projects)}
+            }
         else{
             modal.current.open();
         }
@@ -112,7 +129,7 @@ export default function ProjectsSidebar(){
             </Modal>
             {projectState.selectedScreen == 'default' && <DefaultScreen handleClick={handleAddProject}/>}
             {projectState.selectedScreen == 'adding' && <NewProject onHandleChange={handleChange} onHandleCancel={handleCancel} onHandleSave={handleSave}/>}
-            {projectState.selectedScreen == 'screen' && <ProjectScreen title={currentScreenData.title} formattedDate={currentScreenData.date} description={currentScreenData.description}/>}
+            {projectState.selectedScreen == 'screen' && <ProjectScreen title={currentScreenData.title} formattedDate={formattedDate(currentScreenData.date)} description={currentScreenData.description} onDelete={() => handleDelete(currentScreenData.title)}/>}
         </>
     )
 }
