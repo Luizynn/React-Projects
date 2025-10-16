@@ -37,11 +37,18 @@ export default function NewProject({onHandleChange, onHandleSave, onHandleCancel
                             >
                                 {item.label}
                         </label>
-                        <input
+                        {item.label !== 'description' ? <input
+                            className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" 
+                            type={item.type}
+                            onChange={(event) => onHandleChange(item.refKey, event.target.value)}
+                            value={item.refKey.current}/> : 
+
+                            <textarea 
                             className="w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600" 
                             type={item.type}
                             onChange={(event) => onHandleChange(item.refKey, event.target.value)}
                             value={item.refKey.current}/>
+                            }
                     </p>)
                 })}
         </div>
