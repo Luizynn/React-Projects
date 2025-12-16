@@ -1,13 +1,13 @@
-import { useActionState } from "react";
+import { useActionState, use } from "react";
 import { isNameCorrect, isOpinionCorrect, isTitleCorrect } from "../util/validation";
-
+import { OpinionsContext } from "../store/opinions-context";
 
 
 export function NewOpinion() {
-  const [formsState, formsAction] = useActionState(signupAction, {errors: null})
 
+  const { addOpinion } = use(OpinionsContext)
 
-  function signupAction(prevFormState, formData){
+  async function signupAction(prevFormState, formData){
     const userName = formData.get("userName");
     const title = formData.get("title")
     const yourOpinion = formData.get("body")
@@ -28,6 +28,7 @@ export function NewOpinion() {
     }
   
     if(errors.length > 0){
+    
       return {
         errors,
         enteredValues: {
@@ -37,10 +38,15 @@ export function NewOpinion() {
         }
       }
     }
-
+  
+    await addOpinion({title, body, userName})
     return { errors: null }
   }
 
+  const [formsState, formsAction] = useActionState(signupAction, {
+    errors: null,
+  })
+  
   return (
     <div id="new-opinion">
       <h2>Share your opinion!</h2>
