@@ -1,3 +1,5 @@
+import { use } from 'react'
+
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
   function upvoteAction(formData){
     console.log('Upvote')
