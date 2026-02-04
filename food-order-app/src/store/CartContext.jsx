@@ -4,6 +4,7 @@ export const CartContext = createContext({
     items: [],
     addItem: (item) => {},
     removeItem: (id) => {}, 
+    
 })
 
 function cartReducer(state, action){
@@ -13,7 +14,7 @@ function cartReducer(state, action){
         const updatedItems = [...state.items];
 
         if(existingCartItemIndex > -1) {
-            const existingItem = state.item[existingCartItemIndex];
+            const existingItem = state.items[existingCartItemIndex];
             const updatedItem = {
                 ...existingItem,
                 quantity: existingItem.quantity + 1,
@@ -44,13 +45,14 @@ function cartReducer(state, action){
 
         return {...state, items: updatedItems}
     }
+
     return state;
 }
 
 
 export function CartContextProvider({children}){
     
-    const [cart, dispatchCartAction] = useReducer(cartReducer, { items: [] });
+    const [cart, dispatchCartAction] = useReducer(cartReducer, { items: []});
 
     function addItem(item) {
         dispatchCartAction({type: 'ADD_ITEM', item})
@@ -60,10 +62,11 @@ export function CartContextProvider({children}){
         dispatchCartAction({type: 'REMOVE_ITEM', id})
     }
 
+
     const cartContext = {
         items: cart.items,
         addItem,
-        removeItem
+        removeItem,
     }
 
     return <CartContext value={cartContext}>{children}</CartContext>
